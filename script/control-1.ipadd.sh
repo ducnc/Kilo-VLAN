@@ -31,7 +31,7 @@ EOF
 
 echo "Cau hinh hostname cho $HOST_NAME NODE"
 sleep 3
-echo "controller1" > /etc/hostname
+echo "$HOST_NAME" > /etc/hostname
 hostname -F /etc/hostname
 
 echo "##### Khoi dong lai may #####"
