@@ -3,7 +3,6 @@
 
 source config.cfg
 
-
 iphost=/etc/hosts
 test -f $iphost.orig || cp $iphost $iphost.orig
 rm $iphost
@@ -12,10 +11,8 @@ cat << EOF >> $iphost
 127.0.0.1       localhost
 $CON_MGNT_IP    $HOST_NAME
 $COM1_MGNT_IP      compute1
-127.0.0.1        compute1
 $COM2_MGNT_IP      compute2
 EOF
-
 
 ########
 echo "############ Cai dat NTP ############"
@@ -24,21 +21,32 @@ echo "############ Cai dat NTP ############"
 apt-get install ntp -y
 apt-get install python-mysqldb -y
 
-# Cai cac goi can thiet cho compute 
-apt-get -y install nova-compute sysfsutils
-apt-get install libguestfs-tools -y
 
 ########
 echo "############ Cau hinh NTP ############"
 sleep 10
 ########
 # Cau hinh ntp
-cp /etc/ntp.conf /etc/ntp.conf.bka
-rm /etc/ntp.conf
+mv /etc/ntp.conf /etc/ntp.conf.bka
 cat /etc/ntp.conf.bka | grep -v ^# | grep -v ^$ >> /etc/ntp.conf
 #
-sed -i 's/server/#server/' /etc/ntp.confc
-echo "server $HOST_NAME" >> /etc/ntp.conf
+sed -i 's/server 0.ubuntu.pool.ntp.org/ \
+#server 0.ubuntu.pool.ntp.org/g' /etc/ntp.conf
+
+sed -i 's/server 1.ubuntu.pool.ntp.org/ \
+#server 1.ubuntu.pool.ntp.org/g' /etc/ntp.conf
+
+sed -i 's/server 2.ubuntu.pool.ntp.org/ \
+#server 2.ubuntu.pool.ntp.org/g' /etc/ntp.conf
+
+sed -i 's/server 3.ubuntu.pool.ntp.org/ \
+#server 3.ubuntu.pool.ntp.org/g' /etc/ntp.conf
+
+sed -i "s/server ntp.ubuntu.com/server $CON_MGNT_IP iburst/g" /etc/ntp.conf
+
+# Cai cac goi can thiet cho compute 
+apt-get -y install nova-compute sysfsutils
+apt-get install libguestfs-tools -y
 
 echo "net.ipv4.conf.all.rp_filter=0" >> /etc/sysctl.conf
 echo "net.ipv4.conf.default.rp_filter=0" >> /etc/sysctl.conf
