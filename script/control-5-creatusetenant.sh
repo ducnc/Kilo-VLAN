@@ -45,8 +45,8 @@ keystone user-role-add --tenant-id $SERVICE_TENANT --user-id $NOVA_USER --role-i
 GLANCE_USER=$(get_id keystone user-create --name=glance --pass="$GLANCE_PASS" --tenant-id $SERVICE_TENANT --email=glance@teststack.com)
 keystone user-role-add --tenant-id $SERVICE_TENANT --user-id $GLANCE_USER --role-id $ADMIN_ROLE
 
-SWIFT_USER=$(get_id keystone user-create --name=swift --pass="$SERVICE_PASSWORD" --tenant-id $SERVICE_TENANT --email=swift@teststack.com)
-keystone user-role-add --tenant-id $SERVICE_TENANT --user-id $SWIFT_USER --role-id $ADMIN_ROLE
+#SWIFT_USER=$(get_id keystone user-create --name=swift --pass="$SERVICE_PASSWORD" --tenant-id $SERVICE_TENANT --email=swift@teststack.com)
+#keystone user-role-add --tenant-id $SERVICE_TENANT --user-id $SWIFT_USER --role-id $ADMIN_ROLE
 
 RESELLER_ROLE=$(get_id keystone role-create --name=ResellerAdmin)
 keystone user-role-add --tenant-id $SERVICE_TENANT --user-id $NOVA_USER --role-id $RESELLER_ROLE
