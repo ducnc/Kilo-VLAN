@@ -187,8 +187,6 @@ ovs-vsctl add-br br-int
 ovs-vsctl add-br br-eth1
 ovs-vsctl add-port br-eth1 eth1
 
-ovs-vsctl add-br br-ex 
-
 echo "############  Khoi dong lai OpenvSwitch ############"
 sleep 7
 
