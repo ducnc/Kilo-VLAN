@@ -4,7 +4,7 @@ source config.cfg
 apt-get install lvm2 -y
 
 echo "########## Create Physical Volume and Volume Group (in sdb disk ) ##########"
-fdisk -l
+
 pvcreate /dev/vdb
 vgcreate cinder-volumes /dev/vdb
 
@@ -23,6 +23,9 @@ cat << EOF > $filecinder
 [DEFAULT]
 rpc_backend = rabbit
 my_ip = $CON_MGNT_IP
+enabled_backends = lvm
+
+glance_host = $CON_MGNT_IP
 
 rootwrap_config = /etc/cinder/rootwrap.conf
 api_paste_confg = /etc/cinder/api-paste.ini
@@ -44,6 +47,11 @@ rabbit_host = $CON_MGNT_IP
 rabbit_userid = openstack
 rabbit_password = $RABBIT_PASS
 
+[lvm]
+volume_driver = cinder.volume.drivers.lvm.LVMVolumeDriver
+volume_group = cinder-volumes
+iscsi_protocol = iscsi
+iscsi_helper = tgtadm
  
 [keystone_authtoken]
 auth_uri = http://$CON_MGNT_IP:5000
@@ -60,14 +68,15 @@ lock_path = /var/lock/cinder
 
 EOF
 
-sed  -r -e 's#(filter = )(\[ "a/\.\*/" \])#\1[ "a\/sda1\/", "a\/sdb\/", "r/\.\*\/"]#g' /etc/lvm/lvm.conf
+#sed -r -e 's#(filter = )(\[ "a/\.\*/" \])#\1[ "a\/sda1\/", "a\/sdb\/", "r/\.\*\/"]#g' /etc/lvm/lvm.conf
+sed -r -i 's#(filter = )(\[ "a/\.\*/" \])#\1["a\/vdb\/", "r/\.\*\/"]#g' /etc/lvm/lvm.conf
 
 # Grant permission for cinder
 chown cinder:cinder $filecinder
 
 echo "########## Syncing Cinder DB ##########"
 sleep 3
-cinder-manage db sync
+su -s /bin/sh -c "cinder-manage db sync" cinder
 
 echo "########## Restarting CINDER service ##########"
 sleep 3
