@@ -82,6 +82,7 @@ echo "########## Restarting CINDER service ##########"
 sleep 3
 service cinder-api restart
 service cinder-scheduler restart
+service tgt restart
 service cinder-volume restart
 
 echo "########## Finish setting up CINDER !!! ##########"
