@@ -20,9 +20,7 @@ sysctl -p
 echo "########## CAI DAT NEUTRON TREN $CON_MGNT_IP ##########"
 sleep 5
 apt-get -y install neutron-server neutron-plugin-ml2 python-neutronclient
-apt-get -y install neutron-plugin-ml2 neutron-plugin-openvswitch-agent neutron-l3-agent neutron-dhcp-agent
-apt-get -y install neutron-server neutron-plugin-ml2 python-neutronclient
-
+apt-get -y install neutron-plugin-ml2 neutron-plugin-openvswitch-agent neutron-dhcp-agent
 
 ######## SAO LUU CAU HINH NEUTRON.CONF CHO $CON_MGNT_IP##################"
 echo "########## SUA FILE CAU HINH  NEUTRON CHO $CON_MGNT_IP ##########"
