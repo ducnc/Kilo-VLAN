@@ -59,6 +59,10 @@ EOF
 echo "##### Remove keystone default db #####"
 rm  /var/lib/keystone/keystone.db
 
+scp -r root@$CON_MGNT_IP:/etc/keystone/ssl /etc/keystone/
+
+apt-get install python-mysqldb -y
+
 echo "##### Restarting keystone service #####"
 service keystone restart
 sleep 3
